@@ -16,6 +16,7 @@ usage() {
     echo "  $(basename $0) [options] input.afzcam rawfile"
     echo "Options:"
     echo "  -h, --help                display this help"
+    echo "      --noiseNinjaName      noise ninja name"
 }
 
 error() {
@@ -30,6 +31,10 @@ case $i in
     -h|--help)
     usage
     exit
+    ;;
+    --noiseninjaname=*)
+    noiseninjaname="${i#*=}"
+    shift # past argument=value
     ;;
     -*)
     echo "Unknown option $1"
@@ -74,3 +79,8 @@ sed -i -e "s@<Maker>\(.*\)</Maker>@<Maker>${make}</Maker>@" ${TMPDIR}/${lCameraM
 sed -i -e "s@<Model>\(.*\)</Model>@<Model>${model}</Model>@" ${TMPDIR}/${lCameraModel}.afcamera/lens-profile.xml
 sed -i -e "s@<CropMultiplier>\(.*\)</CropMultiplier>@<CropMultiplier>${scaleFactor}</CropMultiplier>@" ${TMPDIR}/${lCameraModel}.afcamera/lens-profile.xml
 
+sed -i -e "s@modelName=.*@modelName=\"${model}\"@" ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml
+sed -i -e "s@lensMenuModel=.*@lensMenuModel=\"${model}\"@" ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml
+if [ -n "$noiseninjaname" ]; then
+    sed -i -e "s@noiseNinjaName=.*@noiseNinjaName=\"${noiseninjaname}\"@" ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml
+fi
