@@ -13,7 +13,7 @@ trap cleanup INT TERM EXIT
 
 usage() {
     echo "Usage:"
-    echo "  $(basename $0) [options] input.afzcam rawfile"
+    echo "  $(basename $0) [options] input.afzcam rawfile output.afzcam"
     echo "Options:"
     echo "  -h, --help                display this help"
     echo "      --noiseNinjaName      noise ninja name"
@@ -52,9 +52,16 @@ if [[ -n $2 ]]; then
 rawfile=$2
 fi
 
+if [[ -n $3 ]]; then
+outputafzcamfile=$3
+fi
+
+
 [ "$inputafzcamfile" = "" ] && error "NO INPUT AFZCAM FILE SPECIFIED"
 
 [ "$rawfile" = "" ] && error "NO RAW FILE SPECIFIED"
+
+[ "$outputafzcamfile" = "" ] && error "NO OUTPUT AFZCAM FILE SPECIFIED"
 
 mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
 
@@ -84,3 +91,6 @@ sed -i -e "s@lensMenuModel=.*@lensMenuModel=\"${model}\"@" ${TMPDIR}/${lCameraMo
 if [ -n "$noiseninjaname" ]; then
     sed -i -e "s@noiseNinjaName=.*@noiseNinjaName=\"${noiseninjaname}\"@" ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml
 fi
+
+cd ${TMPDIR} && zip -r ${outputafzcamfile} ${lCameraModel}.afcamera && cd ..
+cp ${TMPDIR}/${outputafzcamfile} .
