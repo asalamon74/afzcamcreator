@@ -55,4 +55,10 @@ mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
 
 unzip ${inputafzcamfile} -d ${TMPDIR}
 
-echo Test
+cameraModel=$(exiftool -p '${UniqueCameraModel;tr/ /_/;s/__+/_/g}' ${rawfile} 2> /dev/null)
+
+lCameraModel=$(echo "$cameraModel" | tr '[:upper:]' '[:lower:]')
+
+echo $cameraModel
+
+mv ${TMPDIR}/*.afcamera ${TMPDIR}/${lCameraModel}.afcamera

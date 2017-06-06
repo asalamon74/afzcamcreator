@@ -4,4 +4,5 @@ Corel AfterShot Pro afzcam creator.
 
 ## Requirements
 
--Unix tools (zip)
+-exiftool
+-Standard Unix tools (zip, tr, ...)
