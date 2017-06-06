@@ -13,7 +13,7 @@ trap cleanup INT TERM EXIT
 
 usage() {
     echo "Usage:"
-    echo "  $(basename $0) [options] input.afzcam"
+    echo "  $(basename $0) [options] input.afzcam rawfile"
     echo "Options:"
     echo "  -h, --help                display this help"
 }
@@ -40,13 +40,19 @@ esac
 done
 
 if [[ -n $1 ]]; then
-inputfile=$1
+inputafzcamfile=$1
 fi
 
-[ "$inputfile" = "" ] && error "NO INPUT FILE SPECIFIED"
+if [[ -n $2 ]]; then
+rawfile=$2
+fi
+
+[ "$inputafzcamfile" = "" ] && error "NO INPUT AFZCAM FILE SPECIFIED"
+
+[ "$rawfile" = "" ] && error "NO RAW FILE SPECIFIED"
 
 mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
 
-unzip ${inputfile} -d ${TMPDIR}
+unzip ${inputafzcamfile} -d ${TMPDIR}
 
 echo Test
