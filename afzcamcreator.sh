@@ -13,7 +13,9 @@ trap cleanup INT TERM EXIT
 
 usage() {
     echo "Usage:"
-    echo "  $(basename $0)"
+    echo "  $(basename $0) [options]"
+    echo "Options:"
+    echo "  -h, --help                display this help"
 }
 
 error() {
@@ -21,6 +23,21 @@ error() {
     usage
     exit 1
 }
+
+for i in "$@"
+do
+case $i in
+    -h|--help)
+    usage
+    exit
+    ;;
+    -*)
+    echo "Unknown option $1"
+    usage
+    exit 1
+    ;;
+esac
+done
 
 mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
 
