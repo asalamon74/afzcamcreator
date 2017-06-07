@@ -18,6 +18,7 @@ usage() {
     echo "  -h, --help                  display this help"
     echo "      --noiseNinjaName=name   noise ninja name"
     echo "      --versionnumber=x.y.z   afzcam version number (default: 1.0.0)"
+    echo "      --author=name           author (default: afzcamcreator)"
 }
 
 error() {
@@ -31,6 +32,7 @@ replaceProperty() {
 }
 
 versionnumber=1.0.0
+author=afzcamcreator
 
 for i in "$@"
 do
@@ -45,6 +47,10 @@ case $i in
     ;;
     --versionnumber=*)
     versionnumber="${i#*=}"
+    shift # past argument=value
+    ;;
+    --author=*)
+    author="${i#*=}"
     shift # past argument=value
     ;;
     -*)
@@ -105,6 +111,7 @@ sed -i -e "s@<CropMultiplier>\(.*\)</CropMultiplier>@<CropMultiplier>${scaleFact
 
 replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "modelName" "${model}"
 replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "lensMenuModel" "${model}"
+replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "author" "${author}"
 replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "majorVersion" ${arrversionnumber[0]}
 replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "minorVersion" ${arrversionnumber[1]}
 replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "bugfixVersion" ${arrversionnumber[2]}
