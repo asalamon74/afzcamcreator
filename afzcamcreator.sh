@@ -20,6 +20,7 @@ usage() {
     echo "      --versionnumber=x.y.z   afzcam version number (default: 1.0.0)"
     echo "      --author=name           author (default: afzcamcreator)"
     echo "      --keepicc               keep the icc specified in input.afzcam"
+    echo "      --icc=file              icc (or icm) file to use"
 }
 
 error() {
@@ -58,6 +59,10 @@ case $i in
     keepicc=1
     shift
     ;;
+    --icc=*)
+    icc="${i#*=}"
+    shift
+    ;;
     -*)
     echo "Unknown option $1"
     usage
@@ -90,6 +95,17 @@ arrversionnumber=(${versionnumber//./ })
 [ "${arrversionnumber[1]}" = "" ] && error "INCORRECT VERSION NUMBER"
 [ "${arrversionnumber[2]}" = "" ] && error "INCORRECT VERSION NUMBER"
 
+[ -n "$icc" -a -n "$keepicc" ] && error "CANNOT USE BOTH --icc AND --keepicc"
+
+[ -n "$icc" -a ! -f "$icc" ] &&  error "CANNOT OPEN ICC FILE: $icc"
+
+baseIcc=$(basename $icc)
+
+if [[ $baseIcc == *.icm ]]; then
+    baseIcc=$(basename $baseIcc .icm).icc
+fi;
+
+echo $baseIcc
 
 mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
 
@@ -126,6 +142,12 @@ if [ -z "$keepicc" ]; then
     rm -rf ${TMPDIR}/${lCameraModel}.afcamera/icc/
 fi
 
+if [ -n "$icc" ]; then
+    replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "cameraProfiles" "100,$baseIcc"
+    rm -rf ${TMPDIR}/${lCameraModel}.afcamera/icc/
+    mkdir ${TMPDIR}/${lCameraModel}.afcamera/icc/
+    cp ${icc} ${TMPDIR}/${lCameraModel}.afcamera/icc/${baseIcc}
+fi
 
 if [ -n "$noiseninjaname" ]; then
     replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "noiseNinjaName" "${noiseninjaname}"
