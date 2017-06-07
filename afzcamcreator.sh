@@ -103,8 +103,8 @@ sed -i -e "s@<Maker>\(.*\)</Maker>@<Maker>${make}</Maker>@" ${TMPDIR}/${lCameraM
 sed -i -e "s@<Model>\(.*\)</Model>@<Model>${model}</Model>@" ${TMPDIR}/${lCameraModel}.afcamera/lens-profile.xml
 sed -i -e "s@<CropMultiplier>\(.*\)</CropMultiplier>@<CropMultiplier>${scaleFactor}</CropMultiplier>@" ${TMPDIR}/${lCameraModel}.afcamera/lens-profile.xml
 
-sed -i -e "s@modelName=.*@modelName=\"${model}\"@" ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml
-sed -i -e "s@lensMenuModel=.*@lensMenuModel=\"${model}\"@" ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml
+replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "modelName" "${model}"
+replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "lensMenuModel" "${model}"
 replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "majorVersion" ${arrversionnumber[0]}
 replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "minorVersion" ${arrversionnumber[1]}
 replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "bugfixVersion" ${arrversionnumber[2]}
