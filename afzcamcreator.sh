@@ -19,6 +19,7 @@ usage() {
     echo "      --noiseNinjaName=name   noise ninja name"
     echo "      --versionnumber=x.y.z   afzcam version number (default: 1.0.0)"
     echo "      --author=name           author (default: afzcamcreator)"
+    echo "      --keepicc               keep the icc specified in input.afzcam"
 }
 
 error() {
@@ -52,6 +53,10 @@ case $i in
     --author=*)
     author="${i#*=}"
     shift # past argument=value
+    ;;
+    --keepicc)
+    keepicc=1
+    shift
     ;;
     -*)
     echo "Unknown option $1"
@@ -116,9 +121,16 @@ replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "majorVersion" ${
 replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "minorVersion" ${arrversionnumber[1]}
 replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "bugfixVersion" ${arrversionnumber[2]}
 
+if [ -z "$keepicc" ]; then
+    replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "cameraProfiles" "100,void.icc"
+    rm -rf ${TMPDIR}/${lCameraModel}.afcamera/icc/
+fi
+
+
 if [ -n "$noiseninjaname" ]; then
     replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "noiseNinjaName" "${noiseninjaname}"
 fi
+
 
 cd ${TMPDIR} && zip -r ${outputafzcamfile} ${lCameraModel}.afcamera && cd ..
 cp ${TMPDIR}/${outputafzcamfile} .
