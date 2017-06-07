@@ -117,7 +117,7 @@ replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "minorVersion" ${
 replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "bugfixVersion" ${arrversionnumber[2]}
 
 if [ -n "$noiseninjaname" ]; then
-    sed -i -e "s@noiseNinjaName=.*@noiseNinjaName=\"${noiseninjaname}\"@" ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml
+    replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "noiseNinjaName" "${noiseninjaname}"
 fi
 
 cd ${TMPDIR} && zip -r ${outputafzcamfile} ${lCameraModel}.afcamera && cd ..
