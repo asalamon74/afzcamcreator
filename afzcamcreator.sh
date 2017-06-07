@@ -15,8 +15,8 @@ usage() {
     echo "Usage:"
     echo "  $(basename $0) [options] input.afzcam rawfile output.afzcam"
     echo "Options:"
-    echo "  -h, --help                display this help"
-    echo "      --noiseNinjaName      noise ninja name"
+    echo "  -h, --help                  display this help"
+    echo "      --noiseNinjaName=name   noise ninja name"
 }
 
 error() {
