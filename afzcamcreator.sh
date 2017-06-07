@@ -17,6 +17,7 @@ usage() {
     echo "Options:"
     echo "  -h, --help                  display this help"
     echo "      --noiseNinjaName=name   noise ninja name"
+    echo "      --versionnumber=x.y.z   afzcam version number (default: 1.0.0)"
 }
 
 error() {
@@ -24,6 +25,12 @@ error() {
     usage
     exit 1
 }
+
+replaceProperty() {
+    sed -i -e "s@$2=.*@$2=\"$3\"@" $1
+}
+
+versionnumber=1.0.0
 
 for i in "$@"
 do
@@ -34,6 +41,10 @@ case $i in
     ;;
     --noiseninjaname=*)
     noiseninjaname="${i#*=}"
+    shift # past argument=value
+    ;;
+    --versionnumber=*)
+    versionnumber="${i#*=}"
     shift # past argument=value
     ;;
     -*)
@@ -56,12 +67,18 @@ if [[ -n $3 ]]; then
 outputafzcamfile=$3
 fi
 
+arrversionnumber=(${versionnumber//./ })
 
 [ "$inputafzcamfile" = "" ] && error "NO INPUT AFZCAM FILE SPECIFIED"
 
 [ "$rawfile" = "" ] && error "NO RAW FILE SPECIFIED"
 
 [ "$outputafzcamfile" = "" ] && error "NO OUTPUT AFZCAM FILE SPECIFIED"
+
+[ "${arrversionnumber[0]}" = "" ] && error "MISSING VERSION NUMBER"
+[ "${arrversionnumber[1]}" = "" ] && error "INCORRECT VERSION NUMBER"
+[ "${arrversionnumber[2]}" = "" ] && error "INCORRECT VERSION NUMBER"
+
 
 mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
 
@@ -88,6 +105,10 @@ sed -i -e "s@<CropMultiplier>\(.*\)</CropMultiplier>@<CropMultiplier>${scaleFact
 
 sed -i -e "s@modelName=.*@modelName=\"${model}\"@" ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml
 sed -i -e "s@lensMenuModel=.*@lensMenuModel=\"${model}\"@" ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml
+replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "majorVersion" ${arrversionnumber[0]}
+replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "minorVersion" ${arrversionnumber[1]}
+replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "bugfixVersion" ${arrversionnumber[2]}
+
 if [ -n "$noiseninjaname" ]; then
     sed -i -e "s@noiseNinjaName=.*@noiseNinjaName=\"${noiseninjaname}\"@" ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml
 fi
