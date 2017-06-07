@@ -27,7 +27,7 @@ error() {
 }
 
 replaceProperty() {
-    sed -i -e "s@$2=.*@$2=\"$3\"@" $1
+    sed -i -e "s@$2=[^>]*@$2=\"$3\"@" $1
 }
 
 versionnumber=1.0.0
