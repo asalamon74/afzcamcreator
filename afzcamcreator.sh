@@ -103,6 +103,8 @@ if [[ $outputafzcamfile != *.afzcam ]]; then
     outputafzcamfile=${outputafzcamfile}.afzcam
 fi;
 
+baseOutputafzcamfile=$(basename $outputafzcamfile .afzcam)
+
 [ "${arrversionnumber[0]}" = "" ] && error "MISSING VERSION NUMBER"
 [ "${arrversionnumber[1]}" = "" ] && error "INCORRECT VERSION NUMBER"
 [ "${arrversionnumber[2]}" = "" ] && error "INCORRECT VERSION NUMBER"
@@ -132,39 +134,41 @@ lCameraModel=$(echo "$cameraModel" | tr '[:upper:]' '[:lower:]')
 
 echo $cameraModel
 
-mv ${TMPDIR}/*.afcamera ${TMPDIR}/${lCameraModel}.afcamera
+mv ${TMPDIR}/*.afcamera ${TMPDIR}/${baseOutputafzcamfile}.afcamera
 
 echo $make
 echo $model
 
-sed -i -e '/<Lens /,/<\/Lens>/d' ${TMPDIR}/${lCameraModel}.afcamera/lens-profile.xml
-sed -i -e "s@<Maker>\(.*\)</Maker>@<Maker>${make}</Maker>@" ${TMPDIR}/${lCameraModel}.afcamera/lens-profile.xml
-sed -i -e "s@<Model>\(.*\)</Model>@<Model>${model}</Model>@" ${TMPDIR}/${lCameraModel}.afcamera/lens-profile.xml
-sed -i -e "s@<CropMultiplier>\(.*\)</CropMultiplier>@<CropMultiplier>${scaleFactor}</CropMultiplier>@" ${TMPDIR}/${lCameraModel}.afcamera/lens-profile.xml
+cameradir=${TMPDIR}/${baseOutputafzcamfile}.afcamera
 
-replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "modelName" "${model}"
-replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "lensMenuModel" "${model}"
-replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "author" "${author}"
-replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "majorVersion" ${arrversionnumber[0]}
-replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "minorVersion" ${arrversionnumber[1]}
-replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "bugfixVersion" ${arrversionnumber[2]}
+sed -i -e '/<Lens /,/<\/Lens>/d' ${cameradir}/lens-profile.xml
+sed -i -e "s@<Maker>\(.*\)</Maker>@<Maker>${make}</Maker>@" ${cameradir}/lens-profile.xml
+sed -i -e "s@<Model>\(.*\)</Model>@<Model>${model}</Model>@" ${cameradir}/lens-profile.xml
+sed -i -e "s@<CropMultiplier>\(.*\)</CropMultiplier>@<CropMultiplier>${scaleFactor}</CropMultiplier>@" ${cameradir}/lens-profile.xml
+
+replaceProperty ${cameradir}/Info.afpxml "modelName" "${model}"
+replaceProperty ${cameradir}/Info.afpxml "lensMenuModel" "${model}"
+replaceProperty ${cameradir}/Info.afpxml "author" "${author}"
+replaceProperty ${cameradir}/Info.afpxml "majorVersion" ${arrversionnumber[0]}
+replaceProperty ${cameradir}/Info.afpxml "minorVersion" ${arrversionnumber[1]}
+replaceProperty ${cameradir}/Info.afpxml "bugfixVersion" ${arrversionnumber[2]}
 
 if [ -z "$keepicc" ]; then
-    replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "cameraProfiles" "100,void.icc"
-    rm -rf ${TMPDIR}/${lCameraModel}.afcamera/icc/
+    replaceProperty ${cameradir}/Info.afpxml "cameraProfiles" "100,void.icc"
+    rm -rf ${cameradir}/icc/
 fi
 
 if [ -n "$icc" ]; then
-    replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "cameraProfiles" "100,$baseIcc"
-    rm -rf ${TMPDIR}/${lCameraModel}.afcamera/icc/
-    mkdir ${TMPDIR}/${lCameraModel}.afcamera/icc/
-    cp ${icc} ${TMPDIR}/${lCameraModel}.afcamera/icc/${baseIcc}
+    replaceProperty ${cameradir}/Info.afpxml "cameraProfiles" "100,$baseIcc"
+    rm -rf ${cameradir}/icc/
+    mkdir ${cameradir}/icc/
+    cp ${icc} ${cameradir}/icc/${baseIcc}
 fi
 
 if [ -n "$noiseninjaname" ]; then
-    replaceProperty ${TMPDIR}/${lCameraModel}.afcamera/Info.afpxml "noiseNinjaName" "${noiseninjaname}"
+    replaceProperty ${cameradir}/Info.afpxml "noiseNinjaName" "${noiseninjaname}"
 fi
 
 
-cd ${TMPDIR} && zip -r ${outputafzcamfile} ${lCameraModel}.afcamera && cd ..
+cd ${TMPDIR} && zip -r ${outputafzcamfile} ${baseOutputafzcamfile}.afcamera && cd ..
 cp ${TMPDIR}/${outputafzcamfile} .
