@@ -13,7 +13,7 @@ trap cleanup INT TERM EXIT
 
 usage() {
     echo "Usage:"
-    echo "  $(basename $0) [options] input.afzcam rawfile output.afzcam"
+    echo "  $(basename $0) [options] input.afzcam imagefile output.afzcam"
     echo "Options:"
     echo "  -h, --help                  display this help"
     echo "      --noiseNinjaName=name   noise ninja name"
@@ -87,7 +87,7 @@ arrversionnumber=(${versionnumber//./ })
 
 [ "$inputafzcamfile" = "" ] && error "NO INPUT AFZCAM FILE SPECIFIED"
 
-[ "$rawfile" = "" ] && error "NO RAW FILE SPECIFIED"
+[ "$rawfile" = "" ] && error "NO IMAGE FILE SPECIFIED"
 
 [ "$outputafzcamfile" = "" ] && error "NO OUTPUT AFZCAM FILE SPECIFIED"
 
