@@ -87,7 +87,11 @@ arrversionnumber=(${versionnumber//./ })
 
 [ "$inputafzcamfile" = "" ] && error "NO INPUT AFZCAM FILE SPECIFIED"
 
+[ ! -f "$inputafzcamfile" ] && error "CANNOT OPEN INPUT AFZCAM FILE"
+
 [ "$rawfile" = "" ] && error "NO IMAGE FILE SPECIFIED"
+
+[ ! -f "$rawfile" ] && error "CANNOT OPEN IMAGE FILE"
 
 [ "$outputafzcamfile" = "" ] && error "NO OUTPUT AFZCAM FILE SPECIFIED"
 
