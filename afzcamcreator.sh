@@ -87,13 +87,21 @@ arrversionnumber=(${versionnumber//./ })
 
 [ "$inputafzcamfile" = "" ] && error "NO INPUT AFZCAM FILE SPECIFIED"
 
-[ ! -f "$inputafzcamfile" ] && error "CANNOT OPEN INPUT AFZCAM FILE"
+if [[ $inputafzcamfile != *.afzcam ]]; then
+    inputafzcamfile=${inputafzcamfile}.afzcam
+fi;
+
+[ ! -f "$inputafzcamfile" ] && error "CANNOT OPEN INPUT AFZCAM FILE ${inputafzcamfile}"
 
 [ "$rawfile" = "" ] && error "NO IMAGE FILE SPECIFIED"
 
 [ ! -f "$rawfile" ] && error "CANNOT OPEN IMAGE FILE"
 
 [ "$outputafzcamfile" = "" ] && error "NO OUTPUT AFZCAM FILE SPECIFIED"
+
+if [[ $outputafzcamfile != *.afzcam ]]; then
+    outputafzcamfile=${outputafzcamfile}.afzcam
+fi;
 
 [ "${arrversionnumber[0]}" = "" ] && error "MISSING VERSION NUMBER"
 [ "${arrversionnumber[1]}" = "" ] && error "INCORRECT VERSION NUMBER"
