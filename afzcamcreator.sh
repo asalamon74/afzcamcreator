@@ -109,9 +109,9 @@ baseOutputafzcamfile=$(basename $outputafzcamfile .afzcam)
 [ "${arrversionnumber[1]}" = "" ] && error "INCORRECT VERSION NUMBER"
 [ "${arrversionnumber[2]}" = "" ] && error "INCORRECT VERSION NUMBER"
 
-[ -n "$icc" -a -n "$keepicc" ] && error "CANNOT USE BOTH --icc AND --keepicc"
+[ -n "$icc" ] && [ -n "$keepicc" ] && error "CANNOT USE BOTH --icc AND --keepicc"
 
-[ -n "$icc" -a ! -f "$icc" ] &&  error "CANNOT OPEN ICC FILE: $icc"
+[ -n "$icc" ] && [ ! -f "$icc" ] &&  error "CANNOT OPEN ICC FILE: $icc"
 
 baseIcc=$(basename $icc)
 
