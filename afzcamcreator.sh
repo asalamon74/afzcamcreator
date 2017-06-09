@@ -13,7 +13,7 @@ trap cleanup INT TERM EXIT
 
 usage() {
     echo "Usage:"
-    echo "  $(basename $0) [options] input.afzcam imagefile output.afzcam"
+    echo "  $(basename "$0") [options] input.afzcam imagefile output.afzcam"
     echo "Options:"
     echo "  -h, --help                  display this help"
     echo "      --noiseNinjaName=name   noise ninja name"
@@ -123,10 +123,10 @@ mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
 
 unzip "${inputafzcamfile}" -d ${TMPDIR}
 
-cameraModel=$(exiftool -p '${UniqueCameraModel;tr/ /_/;s/__+/_/g}' ${rawfile} 2> /dev/null)
+cameraModel=$(exiftool -p '${UniqueCameraModel;tr/ /_/;s/__+/_/g}' "${rawfile}" 2> /dev/null)
 make=$(exiftool -p '${make}' "${rawfile}" 2> /dev/null)
 model=$(exiftool -p '${model}' "${rawfile}" 2> /dev/null)
-scaleFactor=$(exiftool -p '${ScaleFactor35efl}' ${rawfile} 2> /dev/null)
+scaleFactor=$(exiftool -p '${ScaleFactor35efl}' "${rawfile}" 2> /dev/null)
 
 echo "$cameraModel"
 
