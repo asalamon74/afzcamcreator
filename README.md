@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/asalamon74/afzcamcreator.svg?branch=master)](https://travis-ci.org/asalamon74/afzcamcreator)
+
 # afzcamCreator
 
 Corel AfterShot Pro 3 afzcam creator. This tool can create a camera profile for an unsupported camera using information from a similar supported camera profile and an image taken by the new camera.
