@@ -5,7 +5,7 @@ Corel AfterShot Pro 3 afzcam creator. This tool can create a camera profile for 
 ## Requirements
 
 - exiftool
-- Standard Unix tools (zip, tr, ...)
+- Standard Unix tools (zip, sed, ...)
 
 ## Usage
 
