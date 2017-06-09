@@ -45,15 +45,15 @@ case $i in
     ;;
     --noiseninjaname=*)
     noiseninjaname="${i#*=}"
-    shift # past argument=value
+    shift
     ;;
     --versionnumber=*)
     versionnumber="${i#*=}"
-    shift # past argument=value
+    shift
     ;;
     --author=*)
     author="${i#*=}"
-    shift # past argument=value
+    shift
     ;;
     --keepicc)
     keepicc=1
