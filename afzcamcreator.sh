@@ -30,7 +30,7 @@ error() {
 }
 
 replaceProperty() {
-    sed -i -e "s@$2=[^>]*@$2=\"$3\"@" $1
+    sed -i -e "s@$2=[^>]*@$2=\"$3\"@" "$1"
 }
 
 versionnumber=1.0.0
@@ -103,7 +103,7 @@ if [[ $outputafzcamfile != *.afzcam ]]; then
     outputafzcamfile=${outputafzcamfile}.afzcam
 fi;
 
-baseOutputafzcamfile=$(basename $outputafzcamfile .afzcam)
+baseOutputafzcamfile=$(basename "$outputafzcamfile" .afzcam)
 
 [ "${arrversionnumber[0]}" = "" ] && error "MISSING VERSION NUMBER"
 [ "${arrversionnumber[1]}" = "" ] && error "INCORRECT VERSION NUMBER"
@@ -113,10 +113,10 @@ baseOutputafzcamfile=$(basename $outputafzcamfile .afzcam)
 
 [ -n "$icc" ] && [ ! -f "$icc" ] &&  error "CANNOT OPEN ICC FILE: $icc"
 
-baseIcc=$(basename $icc)
+baseIcc=$(basename "$icc")
 
 if [[ $baseIcc == *.icm ]]; then
-    baseIcc=$(basename $baseIcc .icm).icc
+    baseIcc=$(basename "$baseIcc" .icm).icc
 fi;
 
 mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
@@ -132,7 +132,7 @@ lCameraModel=$(echo "$cameraModel" | tr '[:upper:]' '[:lower:]')
 
 echo "$cameraModel"
 
-mv ${TMPDIR}/*.afcamera ${TMPDIR}/${baseOutputafzcamfile}.afcamera
+mv "${TMPDIR}/"*.afcamera "${TMPDIR}/${baseOutputafzcamfile}.afcamera"
 
 echo "$make"
 echo "$model"
@@ -144,22 +144,22 @@ sed -i -e "s@<Maker>\(.*\)</Maker>@<Maker>${make}</Maker>@" ${cameradir}/lens-pr
 sed -i -e "s@<Model>\(.*\)</Model>@<Model>${model}</Model>@" ${cameradir}/lens-profile.xml
 sed -i -e "s@<CropMultiplier>\(.*\)</CropMultiplier>@<CropMultiplier>${scaleFactor}</CropMultiplier>@" ${cameradir}/lens-profile.xml
 
-replaceProperty ${cameradir}/Info.afpxml "modelName" "${model}"
-replaceProperty ${cameradir}/Info.afpxml "lensMenuModel" "${model}"
-replaceProperty ${cameradir}/Info.afpxml "author" "${author}"
-replaceProperty ${cameradir}/Info.afpxml "majorVersion" ${arrversionnumber[0]}
-replaceProperty ${cameradir}/Info.afpxml "minorVersion" ${arrversionnumber[1]}
-replaceProperty ${cameradir}/Info.afpxml "bugfixVersion" ${arrversionnumber[2]}
+replaceProperty "${cameradir}/Info.afpxml" "modelName" "${model}"
+replaceProperty "${cameradir}/Info.afpxml" "lensMenuModel" "${model}"
+replaceProperty "${cameradir}/Info.afpxml" "author" "${author}"
+replaceProperty "${cameradir}/Info.afpxml" "majorVersion" ${arrversionnumber[0]}
+replaceProperty "${cameradir}/Info.afpxml" "minorVersion" ${arrversionnumber[1]}
+replaceProperty "${cameradir}/Info.afpxml" "bugfixVersion" ${arrversionnumber[2]}
 
 if [ -z "$keepicc" ]; then
     replaceProperty ${cameradir}/Info.afpxml "cameraProfiles" "100,void.icc"
-    rm -rf ${cameradir}/icc/
+    rm -rf "${cameradir}/icc/"
 fi
 
 if [ -n "$icc" ]; then
     replaceProperty ${cameradir}/Info.afpxml "cameraProfiles" "100,$baseIcc"
-    rm -rf ${cameradir}/icc/
-    mkdir ${cameradir}/icc/
+    rm -rf "${cameradir}/icc/"
+    mkdir "${cameradir}/icc/"
     cp ${icc} ${cameradir}/icc/${baseIcc}
 fi
 
