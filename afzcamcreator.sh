@@ -137,34 +137,34 @@ echo "$model"
 
 cameradir=${TMPDIR}/${baseOutputafzcamfile}.afcamera
 
-sed -i -e '/<Lens /,/<\/Lens>/d' ${cameradir}/lens-profile.xml
-sed -i -e "s@<Maker>\(.*\)</Maker>@<Maker>${make}</Maker>@" ${cameradir}/lens-profile.xml
-sed -i -e "s@<Model>\(.*\)</Model>@<Model>${model}</Model>@" ${cameradir}/lens-profile.xml
-sed -i -e "s@<CropMultiplier>\(.*\)</CropMultiplier>@<CropMultiplier>${scaleFactor}</CropMultiplier>@" ${cameradir}/lens-profile.xml
+sed -i -e '/<Lens /,/<\/Lens>/d' "${cameradir}/lens-profile.xml"
+sed -i -e "s@<Maker>\(.*\)</Maker>@<Maker>${make}</Maker>@" "${cameradir}/lens-profile.xml"
+sed -i -e "s@<Model>\(.*\)</Model>@<Model>${model}</Model>@" "${cameradir}/lens-profile.xml"
+sed -i -e "s@<CropMultiplier>\(.*\)</CropMultiplier>@<CropMultiplier>${scaleFactor}</CropMultiplier>@" "${cameradir}/lens-profile.xml"
 
 replaceProperty "${cameradir}/Info.afpxml" "modelName" "${model}"
 replaceProperty "${cameradir}/Info.afpxml" "lensMenuModel" "${model}"
 replaceProperty "${cameradir}/Info.afpxml" "author" "${author}"
-replaceProperty "${cameradir}/Info.afpxml" "majorVersion" ${arrversionnumber[0]}
-replaceProperty "${cameradir}/Info.afpxml" "minorVersion" ${arrversionnumber[1]}
-replaceProperty "${cameradir}/Info.afpxml" "bugfixVersion" ${arrversionnumber[2]}
+replaceProperty "${cameradir}/Info.afpxml" "majorVersion" "${arrversionnumber[0]}"
+replaceProperty "${cameradir}/Info.afpxml" "minorVersion" "${arrversionnumber[1]}"
+replaceProperty "${cameradir}/Info.afpxml" "bugfixVersion" "${arrversionnumber[2]}"
 
 if [ -z "$keepicc" ]; then
-    replaceProperty ${cameradir}/Info.afpxml "cameraProfiles" "100,void.icc"
+    replaceProperty "${cameradir}/Info.afpxml" "cameraProfiles" "100,void.icc"
     rm -rf "${cameradir}/icc/"
 fi
 
 if [ -n "$icc" ]; then
-    replaceProperty ${cameradir}/Info.afpxml "cameraProfiles" "100,$baseIcc"
+    replaceProperty "${cameradir}/Info.afpxml" "cameraProfiles" "100,$baseIcc"
     rm -rf "${cameradir}/icc/"
     mkdir "${cameradir}/icc/"
-    cp ${icc} ${cameradir}/icc/${baseIcc}
+    cp "${icc}" "${cameradir}/icc/${baseIcc}"
 fi
 
 if [ -n "$noiseninjaname" ]; then
-    replaceProperty ${cameradir}/Info.afpxml "noiseNinjaName" "${noiseninjaname}"
+    replaceProperty "${cameradir}/Info.afpxml" "noiseNinjaName" "${noiseninjaname}"
 fi
 
 
-cd ${TMPDIR} && zip -r ${outputafzcamfile} ${baseOutputafzcamfile}.afcamera && cd ..
-cp ${TMPDIR}/${outputafzcamfile} .
+cd ${TMPDIR} && zip -r "${outputafzcamfile}" "${baseOutputafzcamfile}.afcamera" && cd ..
+cp "${TMPDIR}/${outputafzcamfile}" .
