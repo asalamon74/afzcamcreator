@@ -24,7 +24,7 @@ usage() {
 }
 
 error() {
-    echo $1
+    echo "$1"
     usage
     exit 1
 }
@@ -121,7 +121,7 @@ fi;
 
 mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
 
-unzip ${inputafzcamfile} -d ${TMPDIR}
+unzip "${inputafzcamfile}" -d ${TMPDIR}
 
 cameraModel=$(exiftool -p '${UniqueCameraModel;tr/ /_/;s/__+/_/g}' ${rawfile} 2> /dev/null)
 make=$(exiftool -p '${make}' ${rawfile} 2> /dev/null)
@@ -130,12 +130,12 @@ scaleFactor=$(exiftool -p '${ScaleFactor35efl}' ${rawfile} 2> /dev/null)
 
 lCameraModel=$(echo "$cameraModel" | tr '[:upper:]' '[:lower:]')
 
-echo $cameraModel
+echo "$cameraModel"
 
 mv ${TMPDIR}/*.afcamera ${TMPDIR}/${baseOutputafzcamfile}.afcamera
 
-echo $make
-echo $model
+echo "$make"
+echo "$model"
 
 cameradir=${TMPDIR}/${baseOutputafzcamfile}.afcamera
 
