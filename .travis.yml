@@ -11,7 +11,7 @@ addons:
     - shellcheck
 
 script:
- - shellcheck afzcamcreator.sh
+ - shellcheck -e SC2016 afzcamcreator.sh
 
 matrix:
   fast_finish: true
