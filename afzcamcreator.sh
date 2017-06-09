@@ -119,8 +119,6 @@ if [[ $baseIcc == *.icm ]]; then
     baseIcc=$(basename $baseIcc .icm).icc
 fi;
 
-echo $baseIcc
-
 mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
 
 unzip ${inputafzcamfile} -d ${TMPDIR}
