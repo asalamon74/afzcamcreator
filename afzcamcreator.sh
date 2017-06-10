@@ -119,19 +119,14 @@ fi;
 
 mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
 
-unzip "${inputafzcamfile}" -d ${TMPDIR}
+unzip -q "${inputafzcamfile}" -d ${TMPDIR}
 
 cameraModel=$(exiftool -p '${UniqueCameraModel;tr/ /_/;s/__+/_/g}' "${rawfile}" 2> /dev/null)
 make=$(exiftool -p '${make}' "${rawfile}" 2> /dev/null)
 model=$(exiftool -p '${model}' "${rawfile}" 2> /dev/null)
 scaleFactor=$(exiftool -p '${ScaleFactor35efl}' "${rawfile}" 2> /dev/null)
 
-echo "$cameraModel"
-
 mv "${TMPDIR}/"*.afcamera "${TMPDIR}/${baseOutputafzcamfile}.afcamera"
-
-echo "$make"
-echo "$model"
 
 cameradir=${TMPDIR}/${baseOutputafzcamfile}.afcamera
 
@@ -164,5 +159,6 @@ if [ -n "$noiseninjaname" ]; then
 fi
 
 
-cd ${TMPDIR} && zip -r "${outputafzcamfile}" "${baseOutputafzcamfile}.afcamera" && cd ..
+cd ${TMPDIR} && zip -q -r "${outputafzcamfile}" "${baseOutputafzcamfile}.afcamera" && cd ..
 cp "${TMPDIR}/${outputafzcamfile}" .
+echo "${outputafzcamfile} successfully created"
