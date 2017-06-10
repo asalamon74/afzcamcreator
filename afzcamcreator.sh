@@ -75,21 +75,13 @@ case $i in
 esac
 done
 
-if [[ -n $1 ]]; then
-inputafzcamfile=$1
-fi
-
-if [[ -n $2 ]]; then
-rawfile=$2
-fi
-
-if [[ -n $3 ]]; then
-outputafzcamfile=$3
-fi
+inputafzcamfile=${1:-}
+rawfile=${2:-}
+outputafzcamfile=${3:-}
 
 arrversionnumber=(${versionnumber//./ })
 
-[ "$inputafzcamfile" = "" ] && error "NO INPUT AFZCAM FILE SPECIFIED"
+[[ -z "$inputafzcamfile" ]] && error "NO INPUT AFZCAM FILE SPECIFIED"
 
 if [[ $inputafzcamfile != *.afzcam ]]; then
     inputafzcamfile=${inputafzcamfile}.afzcam
@@ -97,11 +89,11 @@ fi;
 
 [ ! -f "$inputafzcamfile" ] && error "CANNOT OPEN INPUT AFZCAM FILE ${inputafzcamfile}"
 
-[ "$rawfile" = "" ] && error "NO IMAGE FILE SPECIFIED"
+[[ -z "$rawfile" ]] && error "NO IMAGE FILE SPECIFIED"
 
 [ ! -f "$rawfile" ] && error "CANNOT OPEN IMAGE FILE"
 
-[ "$outputafzcamfile" = "" ] && error "NO OUTPUT AFZCAM FILE SPECIFIED"
+[[ -z "$outputafzcamfile" ]] && error "NO OUTPUT AFZCAM FILE SPECIFIED"
 
 if [[ $outputafzcamfile != *.afzcam ]]; then
     outputafzcamfile=${outputafzcamfile}.afzcam
