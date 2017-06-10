@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 TMPROOTDIR="."
 TMPDIR="${TMPROOTDIR}/AFZCAMCREATOR.$$"
@@ -33,6 +34,9 @@ replaceProperty() {
     sed -i -e "s@$2=[^>]*@$2=\"$3\"@" "$1"
 }
 
+icc=
+keepicc=
+noiseninjaname=
 versionnumber=1.0.0
 author=afzcamcreator
 
@@ -109,11 +113,11 @@ baseOutputafzcamfile=$(basename "$outputafzcamfile" .afzcam)
 [ "${arrversionnumber[1]}" = "" ] && error "INCORRECT VERSION NUMBER"
 [ "${arrversionnumber[2]}" = "" ] && error "INCORRECT VERSION NUMBER"
 
-[ -n "$icc" ] && [ -n "$keepicc" ] && error "CANNOT USE BOTH --icc AND --keepicc"
+[ -n "${icc}" ] && [ -n "${keepicc}" ] && error "CANNOT USE BOTH --icc AND --keepicc"
 
-[ -n "$icc" ] && [ ! -f "$icc" ] &&  error "CANNOT OPEN ICC FILE: $icc"
+[ -n "${icc}" ] && [ ! -f "${icc}" ] &&  error "CANNOT OPEN ICC FILE: $icc"
 
-baseIcc=$(basename "$icc")
+baseIcc=$(basename "${icc}")
 
 if [[ $baseIcc == *.icm ]]; then
     baseIcc=$(basename "$baseIcc" .icm).icc
@@ -149,12 +153,12 @@ replaceProperty "${cameradir}/Info.afpxml" "majorVersion" "${arrversionnumber[0]
 replaceProperty "${cameradir}/Info.afpxml" "minorVersion" "${arrversionnumber[1]}"
 replaceProperty "${cameradir}/Info.afpxml" "bugfixVersion" "${arrversionnumber[2]}"
 
-if [ -z "$keepicc" ]; then
+if [ -z "${keepicc}" ]; then
     replaceProperty "${cameradir}/Info.afpxml" "cameraProfiles" "100,void.icc"
     rm -rf "${cameradir}/icc/"
 fi
 
-if [ -n "$icc" ]; then
+if [ -n "${icc}" ]; then
     replaceProperty "${cameradir}/Info.afpxml" "cameraProfiles" "100,$baseIcc"
     rm -rf "${cameradir}/icc/"
     mkdir "${cameradir}/icc/"
