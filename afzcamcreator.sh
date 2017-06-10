@@ -115,6 +115,8 @@ baseOutputafzcamfile=$(basename "$outputafzcamfile" .afzcam)
 
 [ -n "${icc}" ] && [ -n "${keepicc}" ] && error "CANNOT USE BOTH --icc AND --keepicc"
 
+icc="${icc/#\~/$HOME}"
+
 [ -n "${icc}" ] && [ ! -f "${icc}" ] &&  error "CANNOT OPEN ICC FILE: $icc"
 
 baseIcc=$(basename "${icc}")
