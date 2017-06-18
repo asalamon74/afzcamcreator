@@ -117,8 +117,8 @@ if [[ $baseIcc == *.icm ]]; then
     baseIcc=$(basename "$baseIcc" .icm).icc
 fi;
 
-baseIcc=(${baseIcc// /_})
-baseIcc=(${baseIcc//,/_})
+baseIcc=${baseIcc// /_}
+baseIcc=${baseIcc//,/_}
 
 mkdir "$TMPDIR" || error "CANNOT CREATE TEMPORARY FILE DIRECTORY"
 
