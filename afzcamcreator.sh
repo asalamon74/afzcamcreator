@@ -141,7 +141,7 @@ replaceProperty "${cameradir}/Info.afpxml" "author" "${author}"
 replaceProperty "${cameradir}/Info.afpxml" "majorVersion" "${arrversionnumber[0]}"
 replaceProperty "${cameradir}/Info.afpxml" "minorVersion" "${arrversionnumber[1]}"
 replaceProperty "${cameradir}/Info.afpxml" "bugfixVersion" "${arrversionnumber[2]}"
-replaceProperty "${cameradir}/Info.afpxml" "maxSaturation" "$((2**$bitsPerSample-1))"
+replaceProperty "${cameradir}/Info.afpxml" "maxSaturation" "$((2**bitsPerSample-1))"
 
 if [ -z "${keepicc}" ]; then
     replaceProperty "${cameradir}/Info.afpxml" "cameraProfiles" "100,void.icc"
