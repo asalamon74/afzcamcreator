@@ -124,6 +124,7 @@ unzip -q "${inputafzcamfile}" -d ${TMPDIR}
 make=$(exiftool -p '${make}' "${rawfile}" 2> /dev/null)
 model=$(exiftool -p '${model}' "${rawfile}" 2> /dev/null)
 scaleFactor=$(exiftool -p '${ScaleFactor35efl}' "${rawfile}" 2> /dev/null)
+bitsPerSample=$(exiftool -p '${BitsPerSample}' "${rawfile}" 2> /dev/null)
 
 mv "${TMPDIR}/"*.afcamera "${TMPDIR}/${baseOutputafzcamfile}.afcamera"
 
@@ -140,6 +141,7 @@ replaceProperty "${cameradir}/Info.afpxml" "author" "${author}"
 replaceProperty "${cameradir}/Info.afpxml" "majorVersion" "${arrversionnumber[0]}"
 replaceProperty "${cameradir}/Info.afpxml" "minorVersion" "${arrversionnumber[1]}"
 replaceProperty "${cameradir}/Info.afpxml" "bugfixVersion" "${arrversionnumber[2]}"
+replaceProperty "${cameradir}/Info.afpxml" "maxSaturation" "$((2**$bitsPerSample-1))"
 
 if [ -z "${keepicc}" ]; then
     replaceProperty "${cameradir}/Info.afpxml" "cameraProfiles" "100,void.icc"
