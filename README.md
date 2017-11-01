@@ -6,7 +6,7 @@ Corel AfterShot Pro 3 afzcam creator. This tool can create a camera profile for 
 
 ## Requirements
 
-- exiftool
+- [exiftool](https://www.sno.phy.queensu.ca/~phil/exiftool/)
 - Standard Unix tools (zip, sed, ...)
 
 ## Usage
@@ -36,7 +36,7 @@ There are several option for ICC color profiles:
 Is is also possible to change a few other fields of the camera profile
 
 ```
-* --noiseNinjaName=name   noise ninja name
-* --versionnumber=x.y.z   afzcam version number (default: 1.0.0)
-* --author=name           author (default: afzcamcreator)
+--noiseNinjaName=name   noise ninja name
+--versionnumber=x.y.z   afzcam version number (default: 1.0.0)
+--author=name           author (default: afzcamcreator)
 ```
