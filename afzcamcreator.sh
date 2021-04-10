@@ -79,7 +79,7 @@ inputafzcamfile=${1:-}
 rawfile=${2:-}
 outputafzcamfile=${3:-}
 
-arrversionnumber=(${versionnumber//./ })
+IFS='.' read -ra arrversionnumber <<< "${versionnumber}"
 
 [[ -z "$inputafzcamfile" ]] && error "NO INPUT AFZCAM FILE SPECIFIED"
 
